@@ -37,7 +37,7 @@ const Sidebar = () => {
       items: [
         { label: "Orbital Map", icon: <Orbit size={18} />, path: "/visualizer", desc: "3D Orbit View" },
         { label: "Command Center", icon: <LayoutDashboard size={18} />, path: "/command", desc: "Risk Analysis" },
-        { label: "Radar Sweep", icon: <Radio size={18} />, path: "/radar", desc: "Live API Feed" },
+        // { label: "Radar Sweep", icon: <Radio size={18} />, path: "/radar", desc: "Live API Feed" },
       ]
     },
     { 
@@ -53,8 +53,8 @@ const Sidebar = () => {
         // 🚀 NEW: Saved Asteroids Requirement
         { label: "Telemetry Vault", icon: <Bookmark size={18} />, path: "/telemetry-vault", desc: "Saved Asteroids" },
         // 🚀 NEW: Data Visualizer Requirement
-        { label: "Quantum Engine", icon: <BarChart3 size={18} />, path: "/quantum-engine", desc: "Trajectory Analytics" },
-        { label: "Risk Matrix", icon: <ShieldAlert size={18} />, path: "/risk-matrix", desc: "Threat Modeling" },
+        // { label: "Quantum Engine", icon: <BarChart3 size={18} />, path: "/quantum-engine", desc: "Trajectory Analytics" },
+        // { label: "Risk Matrix", icon: <ShieldAlert size={18} />, path: "/risk-matrix", desc: "Threat Modeling" },
       ]
     }
   ];

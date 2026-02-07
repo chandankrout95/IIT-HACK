@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import counterReducer from "./slices/counterSlice";
 import authReducer from "./slices/authSlice";
 import asteroidReducer from "./slices/asteroidSlice";
+import chatReducer from "./slices/chatSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   counter: counterReducer,
   auth: authReducer,
   asteroid: asteroidReducer, 
+  chat: chatReducer, 
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
