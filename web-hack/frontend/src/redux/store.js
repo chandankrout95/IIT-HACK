@@ -1,9 +1,26 @@
-import React from 'react'
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import counterReducer from "./slices/counterSlice";
 
-const store = () => {
-  return (
-    <div>store</div>
-  )
-}
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-export default store
+const persistConfig = {
+  key: "root",
+  storage,
+};
+
+const rootReducer = combineReducers({
+  counter: counterReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+export const persistor = persistStore(store);

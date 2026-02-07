@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import AppNavigator from "./navigation/AppNavigator";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <div>
+      <AppNavigator />
+    </div>
+  );
+};
 
-export default App
+export default App;
