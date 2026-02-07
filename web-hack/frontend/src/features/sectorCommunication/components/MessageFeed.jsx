@@ -4,40 +4,56 @@ import { Trash2, X, Reply } from "lucide-react";
 
 const EMOJIS = ["🚀", "☄️", "🛡️", "🔴", "📡"];
 
-// --- NEW SUB-COMPONENT FOR INDIVIDUAL MESSAGES ---
 const MessageItem = ({ msg, isMe, isFirstInGroup, isLastInGroup, currentUserId, isActive, setActiveMessageId, onReact, onDelete, onReply, hasReactions }) => {
-  // Hooks are now safe here because they are at the top level of this component
   const x = useMotionValue(0);
   const iconOpacity = useTransform(x, [0, 50], [0, 1]);
   const iconScale = useTransform(x, [0, 50], [0.5, 1.2]);
 
-  const hasMyReaction = (emoji) =>
-    msg.reactions?.some((r) => r.user === currentUserId && r.emoji === emoji);
-
-  const handleDragEnd = (_, info) => {
-    if (info.offset.x > 50) {
-      onReply(msg);
+  // --- 🛰️ SMART TIME FORMATTER ---
+  const formatTimestamp = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const now = new Date();
+    
+    // Check if it's the same day
+    const isToday = date.toDateString() === now.toDateString();
+    
+    if (isToday) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    } else {
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
     }
   };
+
+  const hasMyReaction = (emoji) =>
+    msg.reactions?.some((r) => (r.user?._id || r.user) === currentUserId && r.emoji === emoji);
+
+  const handleDragEnd = (_, info) => {
+    if (info.offset.x > 50) onReply(msg);
+  };
+
+  // Safe access to populated user data
+  const senderName = msg.user?.fullName || "Unknown Operative";
 
   return (
     <motion.div
       initial={{ opacity: 0, x: isMe ? 10 : -10 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`flex flex-col ${isMe ? "items-end" : "items-start"} message-bubble relative group`}
-      style={{ 
-        marginBottom: isLastInGroup ? "1.2rem" : hasReactions ? "18px" : "3px" 
-      }}
+      className={`flex flex-col ${isMe ? "items-end" : "items-start"} message-bubble relative group w-full`}
+      style={{ marginBottom: isLastInGroup ? "1.2rem" : hasReactions ? "18px" : "3px" }}
     >
+      {/* 🛰️ USERNAME & TIMESTAMP HEADER */}
       {isFirstInGroup && (
-        <div className={`flex items-center gap-2 mb-1 px-1 mt-2 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
-          <span className={`text-[9px] font-black uppercase italic tracking-widest ${isMe ? "text-cyan-400" : "text-purple-500"}`}>
-            {msg.username}
+        <div className={`flex items-baseline gap-2 mb-1 px-1 mt-2 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
+          <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isMe ? "text-cyan-400" : "text-purple-400"}`}>
+            {isMe ? "You" : senderName}
+          </span>
+          <span className="text-[8px] text-gray-500 font-mono opacity-60">
+            [{formatTimestamp(msg.createdAt || msg.timestamp)}]
           </span>
         </div>
       )}
 
-      {/* SWIPE ICON */}
       {!isMe && (
         <motion.div style={{ opacity: iconOpacity, scale: iconScale }} className="absolute left-[-40px] top-1/2 -translate-y-1/2 text-cyan-400">
           <Reply size={20} />
@@ -52,21 +68,47 @@ const MessageItem = ({ msg, isMe, isFirstInGroup, isLastInGroup, currentUserId, 
         onDoubleClick={(e) => { e.stopPropagation(); setActiveMessageId(isActive ? null : msg._id); }}
         onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setActiveMessageId(isActive ? null : msg._id); }}
         className={`relative max-w-[85%] p-3 border transition-all duration-200 cursor-grab active:cursor-grabbing
-          ${isMe ? "bg-cyan-950/20 border-cyan-500/20" : "bg-white/5 border-white/10"}
-          ${isActive ? "ring-2 ring-cyan-500/40 border-cyan-500/60 z-20 shadow-[0_0_15px_rgba(6,182,212,0.1)]" : "z-10"}
+          ${isMe ? "bg-cyan-950/20 border-cyan-500/20 shadow-[inset_0_0_10px_rgba(6,182,212,0.05)]" : "bg-white/5 border-white/10"}
+          ${isActive ? "ring-1 ring-cyan-500/40 border-cyan-500/60 z-20 shadow-[0_0_20px_rgba(6,182,212,0.15)]" : "z-10"}
         `}
         style={{
           x,
-          borderTopLeftRadius: !isMe && isFirstInGroup ? "12px" : isMe ? "12px" : "4px",
-          borderTopRightRadius: isMe && isFirstInGroup ? "12px" : !isMe ? "12px" : "4px",
-          borderBottomLeftRadius: !isMe && isLastInGroup ? "12px" : "4px",
-          borderBottomRightRadius: isMe && isLastInGroup ? "12px" : "4px",
+          borderRadius: "8px",
+          borderTopLeftRadius: !isMe && !isFirstInGroup ? "2px" : "8px",
+          borderTopRightRadius: isMe && !isFirstInGroup ? "2px" : "8px",
         }}
       >
-        {msg.text && <p className="text-[13px] text-gray-200 leading-snug select-text">{msg.text}</p>}
-        {msg.image && <div className="mt-1 rounded-sm overflow-hidden border border-white/5"><img src={msg.image} alt="uplink" className="max-h-60 w-full object-cover" /></div>}
+        {/* MAIN CONTENT */}
+        {msg.text && <p className="text-[13px] text-gray-200 leading-snug select-text font-sans">{msg.text}</p>}
+        {msg.image && (
+          <div className="mt-2 rounded-sm overflow-hidden border border-white/5">
+            <img src={msg.image} alt="uplink" className="max-h-60 w-full object-cover" />
+          </div>
+        )}
 
-        {/* HUD */}
+        {/* 🛰️ NESTED REPLIES THREAD */}
+        {msg.replies && msg.replies.length > 0 && (
+          <div className="mt-3 pt-2 border-t border-white/5 flex flex-col gap-2">
+            {msg.replies.map((reply, rid) => (
+              <div key={rid} className="flex flex-col gap-1 pl-2 border-l-2 border-cyan-500/30 bg-white/5 p-2 rounded-r-sm">
+                 <div className="flex justify-between items-center gap-4">
+                    <span className="text-[8px] font-black text-cyan-400 uppercase tracking-tighter">
+                      {reply.user?.fullName || "Signal"}
+                    </span>
+                    <span className="text-[7px] text-gray-600 font-mono">
+                      {formatTimestamp(reply.timestamp || reply.createdAt)}
+                    </span>
+                 </div>
+                 {reply.text && <p className="text-[11px] text-gray-300 leading-tight">{reply.text}</p>}
+                 {reply.image && (
+                    <img src={reply.image} className="mt-1 max-h-32 rounded-sm border border-white/10" alt="reply-img" />
+                 )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* HUD (Action Menu) */}
         <AnimatePresence>
           {isActive && (
             <motion.div initial={{ opacity: 0, scale: 0.9, y: 5 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 5 }} onClick={(e) => e.stopPropagation()}
@@ -75,7 +117,7 @@ const MessageItem = ({ msg, isMe, isFirstInGroup, isLastInGroup, currentUserId, 
               <div className="flex gap-1.5 px-2 border-r border-white/10">
                 {EMOJIS.map((emoji) => (
                   <button key={emoji} onClick={() => { onReact(msg._id, emoji); setActiveMessageId(null); }}
-                    className={`text-base transition-all rounded px-1 py-0.5 ${hasMyReaction(emoji) ? "bg-cyan-500/30 ring-1 ring-cyan-400 scale-125 shadow-[0_0_10px_rgba(34,211,238,0.4)]" : "hover:scale-125 opacity-60 hover:opacity-100"}`}
+                    className={`text-base transition-all rounded px-1 py-0.5 ${hasMyReaction(emoji) ? "bg-cyan-500/30 ring-1 ring-cyan-400 scale-125" : "hover:scale-125 opacity-60 hover:opacity-100"}`}
                   >{emoji}</button>
                 ))}
               </div>
@@ -92,7 +134,7 @@ const MessageItem = ({ msg, isMe, isFirstInGroup, isLastInGroup, currentUserId, 
         {hasReactions && (
           <div className={`absolute bottom-[-10px] flex gap-1.5 ${isMe ? "right-2" : "left-2"}`}>
             {msg.reactions.map((r, i) => (
-              <motion.span key={i} className={`text-[9px] px-1.5 py-0.5 rounded-full border font-bold ${r.user === currentUserId ? "bg-cyan-950/90 border-cyan-400 text-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.4)]" : "bg-[#0a0a0a] border-white/10 text-gray-500"}`}>{r.emoji}</motion.span>
+              <motion.span key={i} className={`text-[9px] px-1.5 py-0.5 rounded-full border font-bold ${ (r.user?._id || r.user) === currentUserId ? "bg-cyan-950/90 border-cyan-400 text-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.4)]" : "bg-[#0a0a0a] border-white/10 text-gray-500"}`}>{r.emoji}</motion.span>
             ))}
           </div>
         )}
@@ -101,7 +143,6 @@ const MessageItem = ({ msg, isMe, isFirstInGroup, isLastInGroup, currentUserId, 
   );
 };
 
-// --- MAIN FEED COMPONENT ---
 const MessageFeed = ({ messages, currentUserId, onDelete, onReact, onReply }) => {
   const messagesEndRef = useRef(null);
   const [activeMessageId, setActiveMessageId] = useState(null);
@@ -124,13 +165,18 @@ const MessageFeed = ({ messages, currentUserId, onDelete, onReact, onReply }) =>
         {messages?.map((msg, idx) => {
           const prevMsg = messages[idx - 1];
           const nextMsg = messages[idx + 1];
+          
+          // Logic for grouping messages by user
+          const isFirstInGroup = !prevMsg || (prevMsg.user?._id || prevMsg.user) !== (msg.user?._id || msg.user);
+          const isLastInGroup = !nextMsg || (nextMsg.user?._id || nextMsg.user) !== (msg.user?._id || msg.user);
+
           return (
             <MessageItem
               key={msg._id || idx}
               msg={msg}
-              isMe={msg.user === currentUserId}
-              isFirstInGroup={!prevMsg || prevMsg.user !== msg.user}
-              isLastInGroup={!nextMsg || nextMsg.user !== msg.user}
+              isMe={(msg.user?._id || msg.user) === currentUserId}
+              isFirstInGroup={isFirstInGroup}
+              isLastInGroup={isLastInGroup}
               currentUserId={currentUserId}
               isActive={activeMessageId === msg._id}
               setActiveMessageId={setActiveMessageId}

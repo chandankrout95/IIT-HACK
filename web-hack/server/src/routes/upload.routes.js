@@ -30,6 +30,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     };
 
     const result = await streamUpload(req.file);
+    // console.log(result)
     res.json({ imageUrl: result.secure_url });
   } catch (err) {
     console.error("UPLOAD_ROUTE_ERROR:", err);

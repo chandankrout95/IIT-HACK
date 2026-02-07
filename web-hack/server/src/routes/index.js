@@ -1,8 +1,8 @@
 import express from 'express';
 import authRoutes from './auth.routes.js';
 import asteroidRoutes from './asteroid.routes.js'
-// import radarRoutes from './radar.routes.js'; // Future: for NASA API logic
-// import userRoutes from './user.routes.js';   // Future: for Profile logic
+import messageRoutes from './message.route.js'
+
 
 const router = express.Router();
 
@@ -18,6 +18,8 @@ router.get('/status', (req, res) => {
 // 📂 Sub-Route Registration
 router.use('/auth', authRoutes);
 router.use('/asteroids', asteroidRoutes);
+router.use('/message', messageRoutes);
+
 // router.use('/radar', radarRoutes);
 // router.use('/user', userRoutes);
 

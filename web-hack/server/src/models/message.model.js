@@ -12,13 +12,14 @@ const reactionSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { _id: false } // reactions don’t need their own _id
+  { _id: false }
 );
 
-const messageSchema = new mongoose.Schema(
+// 🛰️ NEW: Define the structure for a Reply
+const replySchema = new mongoose.Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId, // Reference to the sender
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -28,9 +29,36 @@ const messageSchema = new mongoose.Schema(
       maxlength: 1000,
     },
     image: {
-      type: String, // Cloudinary URL
+      type: String, // Cloudinary URL for reply images
+      default: null,
     },
-    reactions: [reactionSchema], // array of reaction objects
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
+
+const messageSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    text: {
+      type: String,
+      trim: true,
+      maxlength: 1000,
+    },
+    image: {
+      type: String,
+      default: null,
+    },
+    reactions: [reactionSchema],
+    // 🛰️ NEW: Array of reply objects
+    replies: [replySchema], 
     timestamp: {
       type: Date,
       default: Date.now,
