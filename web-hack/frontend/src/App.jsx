@@ -1,10 +1,13 @@
 import React from "react";
 import AppNavigator from "./navigation/AppNavigator";
+import { ToastProvider } from "./context/ToastContext";
 
 const App = () => {
   return (
     <div>
-      <AppNavigator />
+      <ToastProvider>
+        <AppNavigator />
+      </ToastProvider>
     </div>
   );
 };

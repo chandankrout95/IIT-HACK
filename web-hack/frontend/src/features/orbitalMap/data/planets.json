@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Mercury",
+    "dist": 6,
+    "size": 0.2,
+    "color": "#888888",
+    "orbitDays": 88,
+    "rotationFactor": 58.6
+  },
+  {
+    "name": "Venus",
+    "dist": 9,
+    "size": 0.45,
+    "color": "#e3bb76",
+    "orbitDays": 224.7,
+    "rotationFactor": -243
+  },
+  {
+    "name": "Earth",
+    "dist": 13,
+    "size": 0.5,
+    "color": "#2277ff",
+    "orbitDays": 365.25,
+    "rotationFactor": 1
+  },
+  {
+    "name": "Mars",
+    "dist": 17,
+    "size": 0.35,
+    "color": "#ef5e3a",
+    "orbitDays": 687,
+    "rotationFactor": 1.03
+  },
+  {
+    "name": "Jupiter",
+    "dist": 24,
+    "size": 1.2,
+    "color": "#d3a57d",
+    "orbitDays": 4333,
+    "rotationFactor": 0.41
+  },
+  {
+    "name": "Saturn",
+    "dist": 32,
+    "size": 1.0,
+    "color": "#f1dca7",
+    "orbitDays": 10759,
+    "rotationFactor": 0.44,
+    "hasRings": true
+  },
+  {
+    "name": "Uranus",
+    "dist": 40,
+    "size": 0.7,
+    "color": "#b2d8d8",
+    "orbitDays": 30687,
+    "rotationFactor": -0.72
+  },
+  {
+    "name": "Neptune",
+    "dist": 46,
+    "size": 0.7,
+    "color": "#3f54ba",
+    "orbitDays": 60190,
+    "rotationFactor": 0.67
+  }
+]

@@ -4,7 +4,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
-import authRoutes from "./routes/auth.routes.js";
+import apiRouter from './routes/index.js';
 
 dotenv.config();
 connectDB();
@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("🚀 Advanced server running");
 });
 
-app.use("/api/auth", authRoutes);
+app.use('/api/v1', apiRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
