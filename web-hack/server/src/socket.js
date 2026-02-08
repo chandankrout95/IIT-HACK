@@ -3,7 +3,14 @@ import { Server } from "socket.io";
 
 export const setupSocket = (server) => {
   const io = new Server(server, {
-    cors: { origin: "*", methods: ["GET", "POST"] },
+    cors: { 
+      // ✅ Allow Render URL in production, localhost in development
+      origin: process.env.NODE_ENV === "production" 
+        ? true 
+        : ["http://localhost:5173", "http://localhost:5000"],
+      methods: ["GET", "POST"],
+      credentials: true 
+    },
   });
 
   // Helper function to keep population consistent across all events
