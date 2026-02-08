@@ -91,7 +91,7 @@ const SignupPage = () => {
 
           <div className="mb-10 text-center">
             <h2 className="text-3xl font-black uppercase italic tracking-tighter">New Enlistment</h2>
-            <p className="text-[9px] text-red-500 font-mono tracking-[0.3em] uppercase mt-2 font-bold underline underline-offset-4">Security Protocol Alpha-9</p>
+            <p className="text-[9px] text-red-500 font-mono tracking-[0.3em] uppercase mt-2 font-bold underline underline-offset-4">Security Protocol cusmic watch</p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit} noValidate autoComplete="off">
@@ -142,7 +142,7 @@ const SignupPage = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">Email Node</label>
+                <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">Email </label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
                   <input
@@ -160,7 +160,7 @@ const SignupPage = () => {
 
             <div className="space-y-2 text-left">
               <div className="flex justify-between items-center pr-1">
-                <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">Security Key</label>
+                <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">Password</label>
                 <span className={`text-[8px] font-mono ${formData.password.length >= 8 ? 'text-green-500' : 'text-gray-600'}`}>
                   {formData.password.length >= 8 ? 'VALID_ENCRYPTION' : '8_CHAR_REQUIRED'}
                 </span>
@@ -203,9 +203,9 @@ const SignupPage = () => {
               className="w-full bg-red-600 py-5 font-black uppercase text-xs tracking-[0.4em] text-white hover:bg-red-500 transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
             >
               {isLoading ? (
-                <>SYNCING <Loader2 size={18} className="animate-spin" /></>
+                <>Signing up... <Loader2 size={18} className="animate-spin" /></>
               ) : (
-                <>INITIATE LINK <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
+                <>Sign up <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
               )}
             </button>
           </form>
@@ -213,7 +213,7 @@ const SignupPage = () => {
           <p className="mt-8 text-center text-[11px] text-gray-600 font-mono tracking-widest uppercase">
             Uplink Active?
             <button onClick={() => navigate("/login")} className="ml-2 text-red-500 hover:text-red-400 font-black italic border-b border-red-500/30">
-              Terminal Login
+               Login
             </button>
           </p>
         </div>

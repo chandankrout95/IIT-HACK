@@ -25,30 +25,31 @@ export const setupSocket = (server) => {
       console.error("Error fetching messages:", err);
     }
 
-    // 2. New Chat Message
+    // 2. New Chat Message (🛰️ Updated to handle asteroidData)
     socket.on("chat-message", async (data) => {
       try {
         const newMessage = new Message({
           user: data.user,
           text: data.text,
           image: data.image,
-          timestamp: data.timestamp,
+          asteroidData: data.asteroidData, // 🛸 Added: Save attached telemetry
+          timestamp: data.timestamp || new Date(),
         });
 
         const savedMsg = await newMessage.save();
         
-        // We must re-fetch or populate the saved message to get user details
+        // Re-fetch with population
         const fullMsg = await populateMessage(Message.findById(savedMsg._id));
-        
         io.emit("chat-message", fullMsg);
       } catch (err) {
         console.error("Save failed:", err);
+        // Fallback to avoid breaking the UI, though data will be unpopulated
         io.emit("chat-message", data); 
       }
     });
 
-    // 3. Listen for Replies (🛰️ Updated with Population)
-    socket.on("message-reply", async ({ messageId, userId, text, image }) => {
+    // 3. Listen for Replies (🛰️ Updated with asteroidData)
+    socket.on("message-reply", async ({ messageId, userId, text, image, asteroidData }) => {
       try {
         const updatedMessage = await Message.findByIdAndUpdate(
           messageId,
@@ -58,6 +59,7 @@ export const setupSocket = (server) => {
                 user: userId,
                 text: text || "",
                 image: image || null,
+                asteroidData: asteroidData || null, // 🛸 Added: Save telemetry in replies
                 timestamp: new Date()
               }
             }
@@ -67,16 +69,14 @@ export const setupSocket = (server) => {
 
         if (!updatedMessage) return;
 
-        // Populate everything so the frontend thread shows usernames
         const fullUpdatedMsg = await populateMessage(Message.findById(messageId));
-        
         io.emit("message-updated", fullUpdatedMsg); 
       } catch (err) {
         console.error("Error saving reply:", err);
       }
     });
 
-    // 4. Listen for Reactions (Updated with Population)
+    // 4. Listen for Reactions
     socket.on("message-react", async ({ messageId, emoji, userId }) => {
       try {
         const message = await Message.findById(messageId);
@@ -99,7 +99,6 @@ export const setupSocket = (server) => {
 
         await message.save();
         
-        // Populate after saving to ensure reactions show user info if needed
         const fullUpdatedMsg = await populateMessage(Message.findById(messageId));
         io.emit("message-updated", fullUpdatedMsg);
       } catch (err) {

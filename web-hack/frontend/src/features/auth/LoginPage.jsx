@@ -117,9 +117,9 @@ const LoginPage = () => {
               className="w-full bg-red-600 py-5 font-black uppercase text-xs tracking-[0.4em] text-white hover:bg-red-500 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
             >
               {isLoading ? (
-                <>SYNCING <Loader2 className="animate-spin" size={18} /></>
+                <>Logging in... <Loader2 className="animate-spin" size={18} /></>
               ) : (
-                <>SYNC TERMINAL <ChevronRight size={18} /></>
+                <>Log in <ChevronRight size={18} /></>
               )}
             </button>
           </form>

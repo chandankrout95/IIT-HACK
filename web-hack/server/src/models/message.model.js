@@ -15,7 +15,21 @@ const reactionSchema = new mongoose.Schema(
   { _id: false }
 );
 
-// 🛰️ NEW: Define the structure for a Reply
+// 🛰️ Define the structure for Asteroid Telemetry
+const asteroidDataSchema = new mongoose.Schema({
+  neoReferenceId: { type: String, required: true },
+  data: {
+    id: String,
+    name: String,
+    position: [Number], // Stores the Array(3) coordinates
+    visualSize: Number,
+    realSizeMeters: String,
+    is_potentially_hazardous_asteroid: Boolean,
+    close_approach_data: [mongoose.Schema.Types.Mixed], // Flexible for NASA nested objects
+  },
+  addedAt: { type: Date },
+}, { _id: false });
+
 const replySchema = new mongoose.Schema(
   {
     user: {
@@ -29,9 +43,11 @@ const replySchema = new mongoose.Schema(
       maxlength: 1000,
     },
     image: {
-      type: String, // Cloudinary URL for reply images
+      type: String,
       default: null,
     },
+    // 🛸 Allow asteroids in replies
+    asteroidData: asteroidDataSchema,
     timestamp: {
       type: Date,
       default: Date.now,
@@ -56,8 +72,9 @@ const messageSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    // 🛰️ Attached Asteroid Telemetry
+    asteroidData: asteroidDataSchema,
     reactions: [reactionSchema],
-    // 🛰️ NEW: Array of reply objects
     replies: [replySchema], 
     timestamp: {
       type: Date,

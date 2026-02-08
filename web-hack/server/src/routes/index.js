@@ -2,6 +2,7 @@ import express from 'express';
 import authRoutes from './auth.routes.js';
 import asteroidRoutes from './asteroid.routes.js'
 import messageRoutes from './message.route.js'
+import planetRoutes from './planet.routes.js'
 
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.get('/status', (req, res) => {
 router.use('/auth', authRoutes);
 router.use('/asteroids', asteroidRoutes);
 router.use('/message', messageRoutes);
+router.use('/planet', planetRoutes);
 
 // router.use('/radar', radarRoutes);
 // router.use('/user', userRoutes);

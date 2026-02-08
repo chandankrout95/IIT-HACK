@@ -87,7 +87,7 @@ const AlertFeedPage = () => {
             <span className="text-[10px] uppercase tracking-[0.4em] font-bold">Chronological Intercept Feed</span>
           </div>
           <h1 className="text-4xl font-black italic uppercase tracking-tighter">
-            Notification <span className="text-red-600">Vault</span>
+            Alert <span className="text-red-600">feed</span>
           </h1>
         </div>
         

@@ -36,14 +36,14 @@ const Sidebar = () => {
       group: "Mission Ops", 
       items: [
         { label: "Orbital Map", icon: <Orbit size={18} />, path: "/visualizer", desc: "3D Orbit View" },
-        { label: "Command Center", icon: <LayoutDashboard size={18} />, path: "/command", desc: "Risk Analysis" },
+        { label: "Asteroid calnder", icon: <LayoutDashboard size={18} />, path: "/command", desc: "check all the asteroids" },
         // { label: "Radar Sweep", icon: <Radio size={18} />, path: "/radar", desc: "Live API Feed" },
       ]
     },
     { 
       group: "Intelligence", 
       items: [
-        { label: "Sector Comms", icon: <MessageSquare size={18} />, path: "/sector-com", desc: "Global Chat" },
+        { label: "Community", icon: <MessageSquare size={18} />, path: "/sector-com", desc: "Global Chat" },
         { label: "Alert Feed", icon: <BellDot size={18} />, path: "/alert-feed", desc: "Close Approaches" },
       ]
     },
@@ -51,7 +51,7 @@ const Sidebar = () => {
       group: "Data Archives", 
       items: [
         // 🚀 NEW: Saved Asteroids Requirement
-        { label: "Telemetry Vault", icon: <Bookmark size={18} />, path: "/telemetry-vault", desc: "Saved Asteroids" },
+        { label: "Watched Vault", icon: <Bookmark size={18} />, path: "/telemetry-vault", desc: "Saved Asteroids" },
         // 🚀 NEW: Data Visualizer Requirement
         // { label: "Quantum Engine", icon: <BarChart3 size={18} />, path: "/quantum-engine", desc: "Trajectory Analytics" },
         // { label: "Risk Matrix", icon: <ShieldAlert size={18} />, path: "/risk-matrix", desc: "Threat Modeling" },
@@ -72,10 +72,7 @@ const Sidebar = () => {
             COSMIC<span className="text-red-600">WATCH</span>
           </h1>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]" />
-          <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">Uplink: Active</span>
-        </div>
+       
       </div>
 
       {/* 2. NAVIGATION GROUPS */}
@@ -103,8 +100,8 @@ const Sidebar = () => {
                     )}
                     <span className={`${isActive ? 'text-red-500' : 'group-hover:text-red-500'} transition-colors`}>{item.icon}</span>
                     <div className="flex flex-col items-start text-left">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
-                      <span className="text-[7px] font-mono text-gray-600 uppercase group-hover:text-gray-400 transition-colors">{item.desc}</span>
+                      <span className="text-[12px] font-bold uppercase tracking-widest">{item.label}</span>
+                      <span className="text-[9px] font-mono text-gray-600 uppercase group-hover:text-gray-400 transition-colors">{item.desc}</span>
                     </div>
                   </button>
                 );
@@ -137,7 +134,7 @@ const Sidebar = () => {
             onClick={handleLogout} 
             className="flex items-center gap-3 px-4 py-2 text-[10px] font-bold uppercase text-red-500/70 hover:text-red-500 transition-colors"
           >
-            <Power size={14} /> Terminate Uplink
+            <Power size={14} /> Log out
           </button>
         </div>
       </div>

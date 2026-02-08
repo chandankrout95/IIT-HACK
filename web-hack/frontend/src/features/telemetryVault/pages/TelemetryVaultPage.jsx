@@ -58,7 +58,7 @@ const TelemetryVaultPage = () => {
           <span className="text-[10px] uppercase tracking-[0.5em]">Classified Archive</span>
         </div>
         <h1 className="text-4xl font-black italic uppercase tracking-tighter">
-          Telemetry <span className="text-red-600">Vault</span>
+          Watched <span className="text-red-600">Vault</span>
         </h1>
       </div>
 

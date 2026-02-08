@@ -5,21 +5,21 @@ import DetailedEarth from "./DetailedEarth";
 
 const SECONDS_IN_DAY = 86400;
 
-const MovingPlanet = ({ data, onSelect }) => {
+const MovingPlanet = ({ data, onSelect, children }) => { // 🛰️ Added children prop
   const groupRef = useRef();
   const planetRef = useRef();
-  const TIME_SCALE = 1500; // Adjusted for better visibility of slow outer planets
+  const TIME_SCALE = 1500; 
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime() * TIME_SCALE;
 
-    // Revolution
+    // Revolution: Move the whole group
     const orbitPeriod = data.orbitDays * SECONDS_IN_DAY;
     const orbitAngle = (t / orbitPeriod) * Math.PI * 2;
     groupRef.current.position.x = Math.cos(orbitAngle) * data.dist;
     groupRef.current.position.z = Math.sin(orbitAngle) * data.dist;
 
-    // Rotation
+    // Rotation: Only spin the planet mesh
     const rotationPeriod = SECONDS_IN_DAY * (data.rotationFactor || 1);
     const rotationAngle = (t / rotationPeriod) * Math.PI * 2;
     if (planetRef.current) planetRef.current.rotation.y = rotationAngle;
@@ -44,13 +44,15 @@ const MovingPlanet = ({ data, onSelect }) => {
           </Sphere>
         )}
         
-        {/* Saturn's Rings */}
         {data.hasRings && (
           <Ring args={[data.size * 1.4, data.size * 2.2, 64]} rotation={[Math.PI / 2.5, 0, 0]}>
             <meshStandardMaterial color={data.color} transparent opacity={0.5} side={2} />
           </Ring>
         )}
       </group>
+
+      {/* 🛰️ Children (PlanetLabel) will be relative to the moving groupRef */}
+      {children}
     </group>
   );
 };

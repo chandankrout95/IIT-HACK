@@ -3,6 +3,7 @@ import counterReducer from "./slices/counterSlice";
 import authReducer from "./slices/authSlice";
 import asteroidReducer from "./slices/asteroidSlice";
 import chatReducer from "./slices/chatSlice";
+import nasaReducer from "./slices/nasaSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   asteroid: asteroidReducer, 
   chat: chatReducer, 
+  nasa: nasaReducer, 
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

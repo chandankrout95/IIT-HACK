@@ -4,6 +4,7 @@ import axios from "axios";
 import socket from "../../../socket/socket";
 import MessageFeed from "../components/MessageFeed";
 import MessageInput from "../components/MessageInput";
+import TelemetryModal from "../components/TelemetryModal"; // 🛰️ Import the modal component
 import { X, Reply, Loader2, Radio } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -17,9 +18,14 @@ const SectorCommunicationPage = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
   const { messages } = useSelector((store) => store.chat);
+  
+  // 🛰️ Pulling live asteroids from your existing store for suggestions
+  const { asteroids } = useSelector((store) => store.asteroid || { asteroids: [] });
 
   // --- STATE ---
   const [replyingTo, setReplyingTo] = useState(null);
+  const [attachedAsteroid, setAttachedAsteroid] = useState(null); // 🛸 Attached Telemetry State
+  const [isModalOpen, setIsModalOpen] = useState(false); // 🔍 Modal visibility
   const [isFetching, setIsFetching] = useState(false);
   const scrollRef = useRef(null);
 
@@ -28,16 +34,12 @@ const SectorCommunicationPage = () => {
     const fetchHistory = async () => {
       try {
         setIsFetching(true);
-        // Using your specific endpoint
         const response = await axios.get("http://localhost:5000/api/v1/message/get-all", {
           withCredentials: true 
         });
-
-        console.log(response)
-        
-        // Handle both standard axios response and custom data wrappers
         const history = response.data.data || response.data;
         dispatch(setChatHistory(history));
+        setTimeout(scrollToBottom, 100);
       } catch (err) {
         console.error("REST_UPLINK_FAILURE:", err);
       } finally {
@@ -45,16 +47,13 @@ const SectorCommunicationPage = () => {
       }
     };
 
-    if (user?._id) {
-      fetchHistory();
-    }
+    if (user?._id) fetchHistory();
   }, [dispatch, user?._id]);
 
   // --- 🛰️ 2. REAL-TIME SOCKET LISTENERS ---
   useEffect(() => {
     if (!user?._id) return;
 
-    // Listen for incoming live events
     socket.on("chat-message", (msg) => {
       dispatch(addMessage(msg));
       scrollToBottom();
@@ -68,16 +67,10 @@ const SectorCommunicationPage = () => {
       dispatch(removeMessage(msgId));
     });
 
-    // Handle history pushed via socket (fallback)
-    socket.on("chat-history", (msgs) => {
-      dispatch(setChatHistory(msgs));
-    });
-
     return () => {
       socket.off("chat-message");
       socket.off("message-updated");
       socket.off("message-deleted");
-      socket.off("chat-history");
     };
   }, [dispatch, user?._id]);
 
@@ -89,71 +82,72 @@ const SectorCommunicationPage = () => {
   };
 
   const handleSend = (content) => {
-    const image = content?.image || null;
-    const messageText = content?.text || "";
+    const { text, image, asteroidData } = content;
 
-    if (!messageText && !image) return;
+    // Prevent empty transmissions
+    if (!text && !image && !asteroidData) return;
+
+    const payload = {
+      user: user._id,
+      text: text,
+      image: image,
+      asteroidData: asteroidData, // 🛰️ Link the NASA telemetry object
+      timestamp: new Date(),
+    };
 
     if (replyingTo) {
-      // 📡 EMIT REPLY
       socket.emit("message-reply", {
+        ...payload,
         messageId: replyingTo._id,
-        userId: user._id,
-        text: messageText,
-        image: image,
       });
       setReplyingTo(null);
     } else {
-      // 📡 EMIT STANDARD MESSAGE
-      socket.emit("chat-message", {
-        user: user._id,
-        text: messageText,
-        image: image,
-        timestamp: new Date(),
-      });
+      socket.emit("chat-message", payload);
     }
-  };
 
-  const handleReact = (messageId, emoji) => {
-    if (!user?._id) return;
-    socket.emit("message-react", { messageId, emoji, userId: user._id });
-  };
-
-  const handleDelete = (messageId) => {
-    if (!user?._id) return;
-    socket.emit("delete-message", { messageId, userId: user._id });
+    setAttachedAsteroid(null); // Clear buffer after send
   };
 
   return (
     <div className="flex flex-col h-[calc(100vh-140px)] max-w-5xl mx-auto bg-black/40 border border-white/10 backdrop-blur-md relative overflow-hidden font-mono shadow-2xl">
       
+      {/* 📡 TELEMETRY MODAL OVERLAY */}
+      <TelemetryModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        savedAsteroids={asteroids}
+        onSelect={(neo) => {
+          setAttachedAsteroid(neo);
+          setIsModalOpen(false);
+        }}
+      />
+
       {/* 📡 HEADER STATUS */}
       <div className="px-6 py-3 border-b border-white/10 flex items-center justify-between bg-white/5">
         <div className="flex items-center gap-3">
           <div className="relative">
             <Radio size={18} className="text-cyan-500 animate-pulse" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full blur-[2px]"></span>
           </div>
           <h2 className="text-xs font-black tracking-[0.3em] uppercase text-gray-300">
-            Sector Comm-Link <span className="text-cyan-500 text-[10px] ml-2 font-mono tracking-normal">({messages.length} pkts)</span>
+            Community 
           </h2>
         </div>
-        <div className="text-[10px] text-gray-500 italic">Encrypted // Node_{user?._id?.slice(-4)}</div>
+        <div className="text-[10px] text-gray-500 italic uppercase">Node_{user?._id?.slice(-4)}</div>
       </div>
 
       {/* 📡 FEED AREA */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar relative" ref={scrollRef}>
+      <div className="flex-1 overflow-y-auto custom-scrollbar relative p-4" ref={scrollRef}>
         {isFetching ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-cyan-500/50">
             <Loader2 className="animate-spin" size={32} />
-            <span className="text-[10px] uppercase tracking-widest animate-pulse">Synchronizing Data...</span>
+            <span className="text-[10px] uppercase tracking-widest">Syncing Data...</span>
           </div>
         ) : (
           <MessageFeed
             messages={messages}
             currentUserId={user?._id}
-            onReact={handleReact}
-            onDelete={handleDelete}
+            onReact={(id, emoji) => socket.emit("message-react", { messageId: id, emoji, userId: user._id })}
+            onDelete={(id) => socket.emit("delete-message", { messageId: id, userId: user._id })}
             onReply={(msg) => setReplyingTo(msg)}
           />
         )}
@@ -163,28 +157,19 @@ const SectorCommunicationPage = () => {
       <AnimatePresence>
         {replyingTo && (
           <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }}
             className="px-6 py-3 bg-cyan-950/30 border-t border-cyan-500/40 flex items-center justify-between backdrop-blur-xl"
           >
             <div className="flex items-center gap-4 overflow-hidden">
               <div className="w-1 h-8 bg-cyan-500 rounded-full"></div>
               <div className="flex flex-col">
                 <span className="text-[9px] text-cyan-400 font-bold uppercase tracking-widest flex items-center gap-1">
-                  <Reply size={10} /> Replying to {replyingTo.user?.username || "Commander"}
+                  <Reply size={10} /> Replying to {replyingTo.user?.username}
                 </span>
-                <p className="text-[11px] text-gray-400 truncate max-w-xl italic mt-0.5">
-                  {replyingTo.text || (replyingTo.image ? "Attached visual data" : "...")}
-                </p>
+                <p className="text-[11px] text-gray-400 truncate italic">{replyingTo.text || "Visual Data"}</p>
               </div>
             </div>
-            <button 
-              onClick={() => setReplyingTo(null)}
-              className="p-1.5 hover:bg-white/10 rounded-md text-gray-500 hover:text-white transition-all"
-            >
-              <X size={14} />
-            </button>
+            <button onClick={() => setReplyingTo(null)} className="text-gray-500 hover:text-white"><X size={14} /></button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -195,6 +180,10 @@ const SectorCommunicationPage = () => {
           userId={user?._id}
           username={user?.username || user?.name}
           onSend={handleSend}
+          replyingTo={replyingTo}
+          attachedAsteroid={attachedAsteroid}
+          onOpenTelemetry={() => setIsModalOpen(true)} // 🛰️ Passed to trigger the database button
+          onClearAttachment={() => setAttachedAsteroid(null)}
         />
       </div>
     </div>
