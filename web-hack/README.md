@@ -53,3 +53,31 @@ Archive high-priority threats to your local encrypted database. Powered by **Red
 ```bash
 git clone [https://github.com/chandankrout95/IIT-HACK.git](https://github.com/chandankrout95/IIT-HACK.git)
 cd web-hack
+
+
+
+DOCKER DEPLOYMENT Docker-Compose.yml file present in the repo inside the web-hack folder of IIT-HACK
+
+version: '3.8'
+
+services:
+  cosmic-watch:
+    # 1. Build using the Dockerfile in the current directory (.)
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # 2. Map the container's port (8000) to your machine's port (8000)
+    ports:
+      - "8000:8000"
+    
+    # 3. Load variables from your .env file
+    env_file:
+      - server/.env
+    
+    # 4. Ensure the container restarts if it crashes
+    restart: always
+
+
+
+The postman.json file is present in the web-hack folder of IIT-HACK 

@@ -45,7 +45,11 @@ const MessageInput = ({
       try {
         const formData = new FormData();
         formData.append("image", image);
-        const res = await axios.post("http://localhost:5000/api/v1/upload", formData);
+        const API_URL = window.location.hostname === "localhost" 
+  ? "http://localhost:5000/api/v1/upload" 
+  : `${window.location.origin}/api/v1/upload`;
+
+const res = await axios.post(API_URL, formData, { withCredentials: true });
         imageUrl = res.data.imageUrl;
       } catch (err) { console.error("UPLOAD_FAIL:", err); }
       setIsUploading(false);

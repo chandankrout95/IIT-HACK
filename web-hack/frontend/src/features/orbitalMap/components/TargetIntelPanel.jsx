@@ -12,7 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToWatchlist } from "../../../redux/slices/asteroidSlice";
 import axios from "axios";
 
-const API = "http://localhost:5000/api/v1";
+// 🛰️ Dynamic API detection
+const API = window.location.hostname === "localhost" 
+  ? "http://localhost:5000/api/v1" 
+  : `${window.location.origin}/api/v1`; // Automatically uses your Render URL
 
 const TargetIntelPanel = ({ object, onClose }) => {
   const dispatch = useDispatch();
