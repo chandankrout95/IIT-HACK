@@ -3,7 +3,8 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Bell, ShieldAlert, Clock, ChevronRight, 
-  Radio, Calendar, Filter
+  Radio, Calendar, Filter,
+  Orbit
 } from 'lucide-react';
 import { calculateRiskScore, getStatus } from "../../../utils/riskEngine";
 
@@ -130,10 +131,13 @@ const AlertFeedPage = () => {
         ))}
       </div>
 
-      {loading ? (
-        <div className="h-64 flex flex-col items-center justify-center gap-4 border border-white/5 bg-white/5 backdrop-blur-sm">
-          <div className="w-12 h-12 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
-          <span className="text-[10px] uppercase tracking-widest text-gray-500">Syncing Orbital Calendars...</span>
+       {loading ? (
+        /* 🛰️ SYSTEM LOADER SYNCED */
+        <div className="h-96 flex flex-col items-center justify-center gap-6">
+          <Orbit className="animate-spin text-cyan-600" size={80} />
+          <span className="text-sm uppercase tracking-[0.5em] animate-pulse text-cyan-500 font-black">
+            Syncing Orbital Data...
+          </span>
         </div>
       ) : (
         <div className="space-y-4 min-h-[400px]">

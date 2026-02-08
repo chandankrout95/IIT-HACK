@@ -1,3 +1,4 @@
+
 import {
   ShieldAlert,
   X,
@@ -135,7 +136,7 @@ const TargetIntelPanel = ({ object, onClose }) => {
           <div className="mt-4 p-4 bg-white/5 border border-white/10 rounded-sm relative overflow-hidden group">
             <div className="flex items-center gap-2 mb-2 text-cyan-400">
               <Cpu size={12} className={isAiLoading ? "animate-spin" : ""} />
-              <span className="text-[9px] uppercase font-bold tracking-widest">
+              <span className="text-[12px] uppercase font-bold tracking-widest">
                 AI Intelligence Brief
               </span>
             </div>
@@ -143,12 +144,12 @@ const TargetIntelPanel = ({ object, onClose }) => {
             {isAiLoading ? (
               <div className="flex items-center gap-2 py-2">
                 <Loader2 size={14} className="animate-spin text-gray-600" />
-                <span className="text-[10px] text-gray-500 italic">
+                <span className="text-[13px] text-gray-500 italic">
                   Processing OpenRouter signal...
                 </span>
               </div>
             ) : (
-              <p className="text-[12px] text-gray-300 leading-relaxed font-serif italic">
+              <p className="text-[14px] text-gray-300 leading-relaxed font-serif italic">
                 "{aiDescription}"
               </p>
             )}
@@ -164,7 +165,7 @@ const TargetIntelPanel = ({ object, onClose }) => {
         <button
           onClick={saveAsteroid}
           disabled={saved || loading}
-          className={`w-full mt-6 py-3 border text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all
+          className={`w-full mt-6 py-3 border text-[13px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all
             ${
               saved
                 ? "bg-green-600/20 border-green-500 text-green-400 cursor-default"
@@ -187,8 +188,8 @@ const TargetIntelPanel = ({ object, onClose }) => {
 
 const Stat = ({ label, value, color = "text-white" }) => (
   <div className="flex justify-between border-b border-white/5 pb-2">
-    <span className="text-[9px] text-gray-500 uppercase">{label}</span>
-    <span className={`text-xs font-bold ${color}`}>{value}</span>
+    <span className="text-[12px] text-gray-500 uppercase">{label}</span>
+    <span className={`text-sm font-bold ${color}`}>{value}</span>
   </div>
 );
 

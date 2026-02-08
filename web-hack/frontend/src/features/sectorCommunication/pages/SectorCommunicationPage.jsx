@@ -5,7 +5,7 @@ import socket from "../../../socket/socket";
 import MessageFeed from "../components/MessageFeed";
 import MessageInput from "../components/MessageInput";
 import TelemetryModal from "../components/TelemetryModal"; // 🛰️ Import the modal component
-import { X, Reply, Loader2, Radio } from "lucide-react";
+import { X, Reply, Loader2, Radio, Orbit } from "lucide-react"; // 🛰️ Added Orbit
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   setChatHistory, 
@@ -138,9 +138,12 @@ const SectorCommunicationPage = () => {
       {/* 📡 FEED AREA */}
       <div className="flex-1 overflow-y-auto custom-scrollbar relative p-4" ref={scrollRef}>
         {isFetching ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-cyan-500/50">
-            <Loader2 className="animate-spin" size={32} />
-            <span className="text-[10px] uppercase tracking-widest">Syncing Data...</span>
+          /* 🛰️ SYSTEM LOADER SYNCED */
+          <div className="h-full flex flex-col items-center justify-center gap-6">
+            <Orbit className="animate-spin text-cyan-600" size={80} />
+            <span className="text-sm uppercase tracking-[0.5em] animate-pulse text-cyan-500 font-black">
+              Syncing Orbital Data...
+            </span>
           </div>
         ) : (
           <MessageFeed

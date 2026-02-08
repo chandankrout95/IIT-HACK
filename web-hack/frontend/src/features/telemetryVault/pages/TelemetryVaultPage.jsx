@@ -63,9 +63,12 @@ const TelemetryVaultPage = () => {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center h-64 gap-4">
-          <Activity className="animate-pulse text-red-600" size={32} />
-          <span className="text-[10px] uppercase tracking-[0.3em] animate-pulse text-gray-500">Accessing Nodes...</span>
+        /* 🛰️ SYSTEM LOADER SYNCED */
+        <div className="h-96 flex flex-col items-center justify-center gap-6">
+          <Orbit className="animate-spin text-cyan-600" size={80} />
+          <span className="text-sm uppercase tracking-[0.5em] animate-pulse text-cyan-500 font-black">
+            Syncing Orbital Data...
+          </span>
         </div>
       ) : asteroids.length === 0 ? (
         <div className="border border-white/5 bg-white/5 p-20 text-center uppercase text-[10px] tracking-widest text-gray-500">
@@ -104,7 +107,6 @@ const TelemetryVaultPage = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* Accessing riskScore from item.data */}
                 <StatBox 
                    label="Threat Score" 
                    value={`${item.data?.riskScore || 0}%`} 
@@ -128,12 +130,12 @@ const TelemetryVaultPage = () => {
               </div>
 
               <div className="flex gap-2">
-                <button className="flex-1 bg-white/5 border border-white/10 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 flex items-center justify-center gap-2 transition-all">
+                {/* <button className="flex-1 bg-white/5 border border-white/10 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 flex items-center justify-center gap-2 transition-all">
                   <ChevronRight size={14} /> Analyze Trajectory
-                </button>
+                </button> */}
                 <button 
                   onClick={() => setConfirmingDelete(item.neoReferenceId)} 
-                  className="px-4 bg-red-950/20 border border-red-900/30 text-red-600 py-2 hover:bg-red-600 hover:text-white transition-all"
+                  className="px-4 w-full flex justify-center bg-red-950/20 border border-red-900/30 text-red-600 py-2 hover:bg-red-600 hover:text-white transition-all"
                 >
                   <Trash2 size={14} />
                 </button>

@@ -1,3 +1,4 @@
+
 import React, { Suspense, useState, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { CameraControls, Stars } from "@react-three/drei";
@@ -19,6 +20,7 @@ import MovingPlanet from "../components/MovingPlanet";
 import Asteroid from "../components/Asteroid";
 import { Sun } from "../components/Sun";
 import Galaxy from "../components/Galaxy";
+import OrbitPath from "../components/OrbitPath";
 import planetData from "../data/planets.json";
 import TargetIntelPanel from "../components/TargetIntelPanel";
 import PlanetLabel from "../components/PlanetLabel";
@@ -286,7 +288,7 @@ const OrbitalMapPage = () => {
           onClick={() =>
             controlsRef.current?.setLookAt(0, 150, 200, 0, 0, 0, true)
           }
-          className="px-6 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2"
+          className="px-6 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-[13px] uppercase font-bold tracking-widest flex items-center gap-2"
         >
           <Globe size={14} className="text-blue-400" /> Galaxy View
         </button>
@@ -295,17 +297,40 @@ const OrbitalMapPage = () => {
             setSelectedObj(null);
             controlsRef.current?.setLookAt(40, 30, 50, 0, 0, 0, true);
           }}
-          className="px-6 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2"
+          className="px-6 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-[13px] uppercase font-bold tracking-widest flex items-center gap-2"
         >
           <Maximize2 size={14} className="text-yellow-500" /> Reset System
         </button>
+      </div>
+
+      {/* 🎨 ASTEROID LEGEND - BOTTOM RIGHT */}
+      <div className="absolute bottom-8 right-8 z-20 bg-black/60 border border-white/10 p-3 backdrop-blur-md flex flex-col gap-3 w-48">
+        <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-1">
+          <AlertCircle size={12} className="text-blue-400" />
+          <span className="text-[12px] uppercase tracking-widest text-gray-400">
+            Asteroid Guide
+          </span>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+            <span className="text-[12px] text-gray-300">Hazardous asteroids</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+            <span className="text-[12px] text-gray-300">Safe asteroids</span>
+          </div>
+        </div>
+        <p className="text-[11px] text-gray-500 italic border-t border-white/5 pt-2 mt-1">
+          Click any asteroid to learn more
+        </p>
       </div>
 
       {/* 🌌 3D SCENE */}
       <Canvas camera={{ position: [50, 40, 80], fov: 40 }}>
         <Suspense fallback={null}>
           <Galaxy />
-          <Stars radius={500} depth={50} count={3000} factor={4} fade />
+          <Stars radius={800} depth={100} count={10000} factor={15} fade={false} />
           <ambientLight intensity={1.5} />
           <pointLight
             position={[0, 0, 0]}
@@ -320,6 +345,10 @@ const OrbitalMapPage = () => {
                 handleFocus([0, 0, 0], { name: "The Sun", size: 2.5 })
               }
             />
+            {/* 🌍 Render Orbit Paths */}
+            {planetData.map((planet) => (
+              <OrbitPath key={`orbit-${planet.name}`} distance={planet.dist} color="#ffffff" opacity={0.4} />
+            ))}
             {planetData.map((planet) => (
               <MovingPlanet
                 key={planet.name}
