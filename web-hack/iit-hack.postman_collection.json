@@ -1,0 +1,389 @@
+{
+  "info": {
+    "_postman_id": "b23931db-223f-439e-af6a-57ac2c6e9b6a",
+    "name": "iit-hack",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46979132",
+    "_collection_link": "https://go.postman.co/collection/46979132-b23931db-223f-439e-af6a-57ac2c6e9b6a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "signup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fullName\" :\"Chandan kumar rout\",\n    \"email\": \"chandankrout95@gmail.com\",\n    \"password\": \"CHANDAN@2005\",\n    \"role\" : \"enthusiast\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/signup",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"chandan123@gmail.com\",\n    \"password\": \"chandan123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "am i log in",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"data\" : {\n  \"id\": \"3767259\",\n  \"name\": \"(2017 BP32)\",\n  \"isHazardous\": false,\n  \"magnitude\": 23.38,\n  \"realSizeMeters\": \"90.69\",\n  \"velocity\": \"13.11\",\n  \"distToEarth\": \"17.11 MKM\",\n  \"riskScore\": 30,\n  \"visualSize\": 0.3915085233713286,\n  \"color\": \"#00ffcc\",\n  \"scannedAt\": \"2026-02-08T01:27:39.367Z\",\n  \"position\": [\n    22.176428349469717,\n    -0.737887144812,\n    7.699937643564776\n  ]\n},\n \"neoReferenceId\": \"3767259\"\n    \n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "nasa api",
+      "item": [
+        {
+          "name": "feed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.nasa.gov/neo/rest/v1/feed?start_date=2026-02-07&end_date=2026-02-07&api_key=2wG2FKo4fVeIjsi5OzPYyFNyqXw7hxLhcdddvSjO",
+              "protocol": "https",
+              "host": [
+                "api",
+                "nasa",
+                "gov"
+              ],
+              "path": [
+                "neo",
+                "rest",
+                "v1",
+                "feed"
+              ],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2026-02-07"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2026-02-07"
+                },
+                {
+                  "key": "api_key",
+                  "value": "2wG2FKo4fVeIjsi5OzPYyFNyqXw7hxLhcdddvSjO"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "upload image",
+      "item": [
+        {
+          "name": "image upload",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "uuid": "a0684d8d-0c4e-45cb-a0a7-819c187190ab",
+                  "src": "/Users/chandankumarrout/Downloads/Gemini_Generated_Image_3zh4sb3zh4sb3zh4.png"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/upload",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "upload"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "asteroid",
+      "item": [
+        {
+          "name": "watch the asteroid",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"data\" : {\n  \"id\": \"3767259\",\n  \"name\": \"(2017 BP32)\",\n  \"isHazardous\": false,\n  \"magnitude\": 23.38,\n  \"realSizeMeters\": \"90.69\",\n  \"velocity\": \"13.11\",\n  \"distToEarth\": \"17.11 MKM\",\n  \"riskScore\": 30,\n  \"visualSize\": 0.3915085233713286,\n  \"color\": \"#00ffcc\",\n  \"scannedAt\": \"2026-02-08T01:27:39.367Z\",\n  \"position\": [\n    22.176428349469717,\n    -0.737887144812,\n    7.699937643564776\n  ]\n},\n \"neoReferenceId\": \"3767259\"\n    \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/asteroids/watch",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "asteroids",
+                "watch"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete the watched asteroid",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"data\" : {\n  \"id\": \"3767259\",\n  \"name\": \"(2017 BP32)\",\n  \"isHazardous\": false,\n  \"magnitude\": 23.38,\n  \"realSizeMeters\": \"90.69\",\n  \"velocity\": \"13.11\",\n  \"distToEarth\": \"17.11 MKM\",\n  \"riskScore\": 30,\n  \"visualSize\": 0.3915085233713286,\n  \"color\": \"#00ffcc\",\n  \"scannedAt\": \"2026-02-08T01:27:39.367Z\",\n  \"position\": [\n    22.176428349469717,\n    -0.737887144812,\n    7.699937643564776\n  ]\n},\n \"neoReferenceId\": \"3767259\"\n    \n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/asteroids/watch/3767259",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "asteroids",
+                "watch",
+                "3767259"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all the watched asteroid",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"data\" : {\n  \"id\": \"3767259\",\n  \"name\": \"(2017 BP32)\",\n  \"isHazardous\": false,\n  \"magnitude\": 23.38,\n  \"realSizeMeters\": \"90.69\",\n  \"velocity\": \"13.11\",\n  \"distToEarth\": \"17.11 MKM\",\n  \"riskScore\": 30,\n  \"visualSize\": 0.3915085233713286,\n  \"color\": \"#00ffcc\",\n  \"scannedAt\": \"2026-02-08T01:27:39.367Z\",\n  \"position\": [\n    22.176428349469717,\n    -0.737887144812,\n    7.699937643564776\n  ]\n},\n \"neoReferenceId\": \"3767259\"\n    \n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/asteroids/get-watch",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "asteroids",
+                "get-watch"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "message",
+      "item": [
+        {
+          "name": "get - all",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"data\" : {\n  \"id\": \"3767259\",\n  \"name\": \"(2017 BP32)\",\n  \"isHazardous\": false,\n  \"magnitude\": 23.38,\n  \"realSizeMeters\": \"90.69\",\n  \"velocity\": \"13.11\",\n  \"distToEarth\": \"17.11 MKM\",\n  \"riskScore\": 30,\n  \"visualSize\": 0.3915085233713286,\n  \"color\": \"#00ffcc\",\n  \"scannedAt\": \"2026-02-08T01:27:39.367Z\",\n  \"position\": [\n    22.176428349469717,\n    -0.737887144812,\n    7.699937643564776\n  ]\n},\n \"neoReferenceId\": \"3767259\"\n    \n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/message/get-all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "message",
+                "get-all"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "planet",
+      "item": [
+        {
+          "name": "get about planets",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"planetName\" : \"earth\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/planet/describe",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "planet",
+                "describe"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "test server",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
