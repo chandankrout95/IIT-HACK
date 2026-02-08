@@ -126,10 +126,10 @@ const Sidebar = () => {
         </div>
 
         <div className="flex flex-col gap-1">
-          <button onClick={() => navigate('/settings')} className="flex items-center gap-3 px-4 py-2 text-[10px] font-bold uppercase text-gray-500 hover:text-white transition-colors">
+          {/* <button onClick={() => navigate('/settings')} className="flex items-center gap-3 px-4 py-2 text-[10px] font-bold uppercase text-gray-500 hover:text-white transition-colors">
             <Settings size={14} /> System Settings
           </button>
-          
+           */}
           <button 
             onClick={handleLogout} 
             className="flex items-center gap-3 px-4 py-2 text-[10px] font-bold uppercase text-red-500/70 hover:text-red-500 transition-colors"
